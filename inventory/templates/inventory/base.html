@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Inventory System{% endblock %}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        nav a, nav form { margin-right: 15px; display: inline; }
+        nav a { text-decoration: none; color: #007bff; }
+        nav a:hover { text-decoration: underline; }
+        button.logout-btn {
+            background: none;
+            border: none;
+            color: #007bff;
+            cursor: pointer;
+            padding: 0;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="{% url 'add_product' %}">Add Product</a>
+        {% if user.is_authenticated %}
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+    </nav>
+    <hr>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>
+<form action="{% url 'logout' %}" method="post" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" style="background:none; border:none; color:#007bff; cursor:pointer;">Logout</button>
+</form>
+<nav>
+    {% if user.is_authenticated %}
+        <a href="{% url 'add_product' %}">Add Product</a>
+        <form action="{% url 'logout' %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" style="background:none; border:none; color:blue; cursor:pointer;">Logout</button>
+        </form>
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register' %}">Register</a>
+    {% endif %}
+</nav>

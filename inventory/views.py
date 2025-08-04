@@ -1,0 +1,87 @@
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import login
+from django.views.decorators.http import require_GET
+from django.contrib.auth.views import LogoutView
+from django.utils.decorators import method_decorator
+from django.db.models import Q
+from django.contrib.auth.forms import UserCreationForm
+from .forms import ProductForm
+from .models import Product
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+def register_user(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('product_list')  # redirect after successful registration
+    else:
+        form = UserCreationForm()
+    return render(request, 'inventory/register.html', {'form': form})
+
+
+@login_required
+def home(request):
+    query = request.GET.get('q')
+    if query:
+        products = Product.objects.filter(name__icontains=query)
+    else:
+        products = Product.objects.all()
+    return render(request, 'inventory/home.html', {'products': products})
+
+
+@login_required
+def product_list(request):
+    query = request.GET.get('q')
+    if query:
+        products = Product.objects.filter(Q(name__icontains=query))
+    else:
+        products = Product.objects.all()
+    return render(request, 'inventory/product_list.html', {'products': products})
+
+
+@login_required
+def add_product(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('product_list')  # or your desired redirect
+    else:
+        form = ProductForm()
+    return render(request, 'inventory/add_product.html', {'form': form})
+
+@login_required
+def edit_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == 'POST':
+        form = ProductForm(request.POST, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect('product_list')
+    else:
+        form = ProductForm(instance=product)
+    return render(request, 'inventory/edit_product.html', {'form': form, 'product': product})
+
+
+@login_required
+def delete_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == 'POST':
+        product.delete()
+        return redirect('product_list')
+    return render(request, 'inventory/delete_product.html', {'product': product})
+
+
+@login_required
+def dashboard(request):
+    products = Product.objects.all()
+    total_products = products.count()
+    return render(request, 'inventory/dashboard.html', {'products': products, 'total_products': total_products})
+
+
+# Allow logout with GET method (optional)
+@method_decorator(require_GET, name='dispatch')
+class LogoutViewAllowGET(LogoutView):
+    pass

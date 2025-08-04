@@ -1,0 +1,41 @@
+<form method="GET" action="{% url 'product_list' %}">
+    <input type="text" name="q" placeholder="Search by name" value="{{ request.GET.q }}">
+    <button type="submit">Search</button>
+</form>
+
+<h1>Products</h1>
+<a href="{% url 'add_product' %}">Add Product</a>
+<ul>
+  {% for product in products %}
+    <li>
+      {{ product.name }} - {{ product.quantity }} - ${{ product.price }}
+      <a href="{% url 'edit_product' product.pk %}">Edit</a>
+    </li>
+  {% empty %}
+    <li>No products available.</li>
+  {% endfor %}
+</ul>
+<a href="{% url 'product_list' %}">Back to list</a>
+<a href="{% url 'product_list' %}">Home</a>  <!-- ✅ matches your current URL name -->
+
+{% block title %}Product List{% endblock %}
+
+{% block content %}
+<h2>Product List</h2>
+<ul>
+  {% for product in products %}
+    <li>{{ product.name }} - {{ product.quantity }}</li>
+  {% empty %}
+    <li>No products available.</li>
+  {% endfor %}
+</ul>
+{% endblock %}
+{% for product in products %}
+  <li>
+    {{ product.name }} - {{ product.quantity }}
+    <a href="{% url 'edit_product' product.pk %}">Edit</a> |
+    <a href="{% url 'delete_product' product.pk %}">Delete</a>
+  </li>
+{% empty %}
+  <li>No products available.</li>
+{% endfor %}

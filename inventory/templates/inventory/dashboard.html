@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inventory Dashboard</title>
+</head>
+<body>
+    <h2>📊 Inventory Dashboard</h2>
+
+    <ul>
+        <li><strong>Total Products:</strong> {{ total_products }}</li>
+        <li><strong>Total Quantity in Stock:</strong> {{ total_quantity }}</li>
+        <li><strong>Total Inventory Value:</strong> ${{ total_value }}</li>
+    </ul>
+
+    <h3>🚨 Low Stock Items (less than 5):</h3>
+    <ul>
+        {% for product in low_stock %}
+            <li>{{ product.name }} — {{ product.quantity }} left</li>
+        {% empty %}
+            <li>No low stock items.</li>
+        {% endfor %}
+    </ul>
+
+    <p><a href="{% url 'home' %}">← Back to Home</a></p>
+</body>
+</html>
+{% extends 'inventory/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h2>Dashboard</h2>
+<p>Total Products: {{ total_products }}</p>
+<p>Total Quantity: {{ total_quantity }}</p>
+{% endblock %}
+<h2>Dashboard</h2>
+<p>Total Products: {{ total_products }}</p>
+<p>Low Stock Products (&lt; 5): {{ low_stock }}</p>
+
+<h3>Recently Added Products</h3>
+<ul>
+    {% for product in recent_products %}
+        <li>{{ product.name }} - Qty: {{ product.quantity }}</li>
+    {% empty %}
+        <li>No products found.</li>
+    {% endfor %}
+</ul>

@@ -1,0 +1,43 @@
+<h2>Inventory List</h2>
+
+<form method="GET" action="{% url 'home' %}">
+  <input type="text" name="q" placeholder="Search product..." value="{{ request.GET.q }}">
+  <button type="submit">Search</button>
+</form>
+
+<a href="{% url 'add_product' %}">+ Add New Product</a>
+
+<table border="1">
+  <tr>
+    <th>Name</th>
+    <th>Category</th>
+    <th>Quantity</th>
+    <th>Price</th>
+    <th>Added</th>
+    <th>Actions</th>
+  </tr>
+  {% for product in products %}
+  <tr>
+    <td>{{ product.name }}</td>
+    <td>{{ product.category.name }}</td>
+    <td>{{ product.quantity }}</td>
+    <td>{{ product.price }}</td>
+    <td>{{ product.added_on }}</td>
+    <td>
+      <a href="{% url 'edit_product' product.pk %}">Edit</a> |
+      <a href="{% url 'delete_product' product.pk %}" onclick="return confirm('Are you sure?')">Delete</a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% if user.is_authenticated %}
+  <p>Welcome, {{ user.username }} | <a href="{% url 'logout' %}">Logout</a></p>
+{% endif %}
+{% extends 'inventory/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1>Welcome to the Inventory System</h1>
+<p>This is the homepage.</p>
+{% endblock %}

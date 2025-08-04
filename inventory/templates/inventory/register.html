@@ -1,0 +1,51 @@
+{% extends 'inventory/base.html' %}
+
+{% block content %}
+  <h2>Register</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Register</button>
+  </form>
+{% endblock %}
+
+  <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+<form method="post">
+
+</form>
+  <!-- inventory/templates/inventory/register.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+</head>
+<body>
+    <h2>User Registration</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>
+
+<h2>Register</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Register</button>
+</form>
+  <h2>Register</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Register</button>
+  </form>
+{% block title %}Register{% endblock %}
+<h2>User Registration</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Register</button>
+</form>
+

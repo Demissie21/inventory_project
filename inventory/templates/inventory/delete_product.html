@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Product</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; }
+        .container { max-width: 400px; margin: auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); text-align: center; }
+        h2 { margin-bottom: 20px; color: #d9534f; }
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 16px; }
+        .btn-danger { background-color: #d9534f; color: white; }
+        .btn-secondary { background-color: #6c757d; color: white; margin-left: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Are you sure you want to delete <strong>"{{ product.name }}"</strong>?</h2>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Yes, delete</button>
+            <a href="{% url 'home' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>
+{% extends 'inventory/base.html' %}
+
+{% block title %}Delete Product{% endblock %}
+
+{% block content %}
+<h2>Are you sure you want to delete "{{ product.name }}"?</h2>
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Yes, delete</button>
+  <a href="{% url 'home' %}">Cancel</a>
+</form>
+{% endblock %}
+
