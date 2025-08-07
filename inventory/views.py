@@ -7,8 +7,41 @@ from django.db.models import Q
 from django.contrib.auth.forms import UserCreationForm
 from .forms import ProductForm
 from .models import Product
+from .models import InventoryItem 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from .forms import InventoryItemForm  # Replace with your form
+def add_item(request):
+    if request.method == 'POST':
+        form = InventoryItemForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('item_list')
+    else:
+        form = InventoryItemForm()
+    return render(request, 'add_item.html', {'form': form})
+
+def delete_item(request, item_id):
+    item = get_object_or_404(InventoryItem, id=item_id)
+    if request.method == 'POST':
+        item.delete()
+        return redirect('item_list')
+    return render(request, 'confirm_delete.html', {'item': item})
+
+def edit_item(request, item_id):
+    item = get_object_or_404(InventoryItem, id=item_id)
+    if request.method == 'POST':
+        form = InventoryItemForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+            return redirect('item_list')
+    else:
+        form = InventoryItemForm(instance=item)
+    return render(request, 'edit_item.html', {'form': form})
+
+def item_list(request):
+    items = InventoryItem.objects.all()
+    return render(request, 'item_list.html', {'items': items})
 def register_user(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
