@@ -41,3 +41,9 @@
 <h1>Welcome to the Inventory System</h1>
 <p>This is the homepage.</p>
 {% endblock %}
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="name">
+    <input type="number" name="quantity">
+    <button type="submit">Add</button>
+</form>
