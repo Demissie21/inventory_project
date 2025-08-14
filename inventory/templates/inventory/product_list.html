@@ -39,3 +39,11 @@
 {% empty %}
   <li>No products available.</li>
 {% endfor %}
+  <h2>Product List</h2>
+  <ul>
+    {% for product in products %}
+      <li>{{ product.name }} - ${{ product.price }}</li>
+    {% empty %}
+      <li>No products available.</li>
+    {% endfor %}
+  </ul>
