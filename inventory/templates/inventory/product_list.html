@@ -1,49 +1,27 @@
-<form method="GET" action="{% url 'product_list' %}">
-    <input type="text" name="q" placeholder="Search by name" value="{{ request.GET.q }}">
-    <button type="submit">Search</button>
-</form>
-
-<h1>Products</h1>
-<a href="{% url 'add_product' %}">Add Product</a>
-<ul>
-  {% for product in products %}
-    <li>
-      {{ product.name }} - {{ product.quantity }} - ${{ product.price }}
-      <a href="{% url 'edit_product' product.pk %}">Edit</a>
-    </li>
-  {% empty %}
-    <li>No products available.</li>
-  {% endfor %}
-</ul>
-<a href="{% url 'product_list' %}">Back to list</a>
-<a href="{% url 'product_list' %}">Home</a>  <!-- ✅ matches your current URL name -->
+{% extends "base.html" %}
 
 {% block title %}Product List{% endblock %}
 
 {% block content %}
-<h2>Product List</h2>
-<ul>
-  {% for product in products %}
-    <li>{{ product.name }} - {{ product.quantity }}</li>
-  {% empty %}
-    <li>No products available.</li>
-  {% endfor %}
-</ul>
-{% endblock %}
-{% for product in products %}
-  <li>
-    {{ product.name }} - {{ product.quantity }}
-    <a href="{% url 'edit_product' product.pk %}">Edit</a> |
-    <a href="{% url 'delete_product' product.pk %}">Delete</a>
-  </li>
-{% empty %}
-  <li>No products available.</li>
-{% endfor %}
   <h2>Product List</h2>
-  <ul>
+  <table border="1" cellpadding="8">
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Price</th>
+      <th>Quantity</th>
+    </tr>
     {% for product in products %}
-      <li>{{ product.name }} - ${{ product.price }}</li>
+    <tr>
+      <td>{{ product.name }}</td>
+      <td>{{ product.description }}</td>
+      <td>{{ product.price }}</td>
+      <td>{{ product.quantity }}</td>
+    </tr>
     {% empty %}
-      <li>No products available.</li>
+    <tr>
+      <td colspan="4">No products available.</td>
+    </tr>
     {% endfor %}
-  </ul>
+  </table>
+{% endblock %}

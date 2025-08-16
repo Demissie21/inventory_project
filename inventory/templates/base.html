@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Inventory Management{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1>Inventory System</h1>
+        <nav>
+            <a href="{% url 'add_product' %}">Add Product</a> |
+            <a href="{% url 'product_list' %}">View Products</a>
+        </nav>
+    </header>
+
+    <hr>
+
+    <div>
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

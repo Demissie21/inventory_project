@@ -1,48 +1,29 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Product
-from .forms import ProductForm
 from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, redirect
-from django.shortcuts import render
 from .models import Product
-
-
-from django.shortcuts import render, redirect
 from .forms import ProductForm
-from django.shortcuts import render, redirect
-from .forms import ProductForm  # Make sure ProductForm exists
-
-def add_product(request):
-    if request.method == 'POST':
-        form = ProductForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('product_list')  # or wherever you list products
-    else:
-        form = ProductForm()
-    return render(request, 'inventory/add_product.html', {'form': form})
-
-def add_product(request):
-    if request.method == 'POST':
-        form = ProductForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('product_list')  # Redirect to product list view
-    else:
-        form = ProductForm()
-    return render(request, 'inventory/add_product.html', {'form': form})
 
 def product_list(request):
     products = Product.objects.all()
     return render(request, 'inventory/product_list.html', {'products': products})
+
+def add_product(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('product_list')
+    else:
+        form = ProductForm()
+    return render(request, 'inventory/add_product.html', {'form': form})
 
 def register_user(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('login')  # Redirect to login after successful registration
+            return redirect('login')
     else:
         form = UserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
