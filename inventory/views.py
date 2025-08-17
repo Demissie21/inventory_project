@@ -3,6 +3,48 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from .models import Product
 from .forms import ProductForm
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Product
+from .forms import ProductForm
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def add_product(request):
+    ...
+
+@login_required
+def edit_product(request, product_id):
+    ...
+
+@login_required
+def delete_product(request, product_id):
+    ...
+
+def delete_product(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+
+    if request.method == 'POST':
+        product.delete()
+        messages.success(request, 'Product deleted successfully.')
+        return redirect('product_list')
+
+    return render(request, 'inventory/delete_product.html', {'product': product})
+
+
+def edit_product(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect('product_list')
+    else:
+        form = ProductForm(instance=product)
+
+    return render(request, 'inventory/edit_product.html', {'form': form, 'product': product})
+
 
 def product_list(request):
     products = Product.objects.all()

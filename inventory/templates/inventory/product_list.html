@@ -3,6 +3,24 @@
 {% block title %}Product List{% endblock %}
 
 {% block content %}
+
+  <!-- Authentication Message -->
+  {% if user.is_authenticated %}
+    <p>Welcome, {{ user.username }} | <a href="{% url 'logout' %}">Logout</a></p>
+  {% else %}
+    <p><a href="{% url 'login' %}">Login</a></p>
+  {% endif %}
+
+  <!-- Django Messages -->
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <!-- Product List -->
   <h2>Product List</h2>
   <table border="1" cellpadding="8">
     <tr>
@@ -10,18 +28,56 @@
       <th>Description</th>
       <th>Price</th>
       <th>Quantity</th>
+      {% if user.is_authenticated %}
+        <th>Actions</th>
+      {% endif %}
     </tr>
+
     {% for product in products %}
     <tr>
       <td>{{ product.name }}</td>
       <td>{{ product.description }}</td>
       <td>{{ product.price }}</td>
       <td>{{ product.quantity }}</td>
+      {% if user.is_authenticated %}
+      <td>
+        <a href="{% url 'edit_product' product.id %}">Edit</a> |
+        <a href="{% url 'delete_product' product.id %}">Delete</a>
+      </td>
+      {% endif %}
     </tr>
     {% empty %}
     <tr>
-      <td colspan="4">No products available.</td>
+      <td colspan="5">No products available.</td>
     </tr>
     {% endfor %}
   </table>
+
+  <!-- Add Product Link -->
+  {% if user.is_authenticated %}
+    <p><a href="{% url 'add_product' %}">Add New Product</a></p>
+  {% endif %}
+
 {% endblock %}
+<form action="{% url 'logout' %}" method="post" style="display: inline;">
+  {% csrf_token %}
+  <button type="submit">Logout</button>
+</form>
+<form method="post" action="{% url 'logout' %}" style="display:inline;">
+  {% csrf_token %}
+  <button type="submit" style="background:none; border:none; color:blue; text-decoration:underline; cursor:pointer;">
+    Logout
+  </button>
+</form>
+{% if user.is_authenticated %}
+  <p>Welcome, {{ user.username }} |
+    <form method="post" action="{% url 'logout' %}" style="display:inline;">
+      {% csrf_token %}
+      <button type="submit" style="background:none; border:none; color:blue; text-decoration:underline; cursor:pointer;">
+        Logout
+      </button>
+    </form>
+  </p>
+{% else %}
+  <p><a href="{% url 'login' %}">Login</a></p>
+{% endif %}
